@@ -288,6 +288,66 @@ os.cpu_count()
 from os import path
 
 # change this to the location of your data
-DATA_DIR = '/Users/nathan/fantasybook/data'
+DATA_DIR = '/Users/tanner.brown/downloads/ltcwff-files-book/data'
 path.join(DATA_DIR, 'adp_2017.csv')
 os.path.join(DATA_DIR, 'adp_2017.csv')  # alt if we didn't want to import path
+
+def for_the_td(player1, player2):
+   return f'{player1} to {player2} for the td!'
+
+for_the_td('Dak', 'Zeke')
+
+starting_qb.islower()
+
+def is_leveon(player):
+   return player.replace("'", '').lower() == "leveon bell"
+
+def commentary(number):
+   if number >= 100:
+      return f'{number} is a good score'
+   else:
+      return f"{number}'s not that good"
+
+giants_roster = ['Daniel Jones', 'Saquon Barkley', 'Evan Engram', 'OBJ']
+
+giants_roster[0:3]
+giants_roster[:3]
+giants_roster[:-1]
+[x for x in giants_roster if x != 'OBJ']
+[x for x in giants_roster if x in ['Daniel Jones', 'Saquon Barkley', 'Evan Engram']]
+
+league_settings = {'number_of_teams': 12, 'ppr': True}
+league_settings['number_of_teams'] = 10
+
+league_settings
+
+def toggle_ppr(settings):
+   settings['ppr'] = not settings ['ppr']
+   return settings
+league_settings
+toggle_ppr(league_settings)
+
+
+my_roster_list = ['tom brady', 'adrian peterson', 'antonio brown']
+
+for player in my_roster_list:
+   print(player.split(' ')[-1])
+
+{player: len(player) for player in my_roster_list}
+
+
+my_roster_dict = {
+   'qb': 'tom brady', 'rb1': 'adrian peterson', 'wr1': 'davante adams', 'wr2': 'john brown'}
+
+for x, y in my_roster_dict.items():
+    print(x)
+
+[player for _, player in my_roster_dict.items()
+    if player.split(' ')[-1][0] in ['a', 'b']]
+
+
+def mapper(list, function):
+   return [function(x) for x in list]
+
+list_of_rushing_yds = [1, 110, 60, 4,0, 0, 0]
+mapper(list_of_rushing_yds, lambda x: x*0.1))
