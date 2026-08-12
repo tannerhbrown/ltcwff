@@ -5,7 +5,7 @@ import pandas as pd
 # stored
 # on Windows it might be something like 'C:/mydir'
 
-DATA_DIR = '/Users/nathan/fantasybook/data'
+DATA_DIR = '/Users/tanner.brown/downloads/ltcwff-files-book/data'
 
 ##############
 # Loading data
@@ -31,7 +31,9 @@ adp['name'].head()
 
 type(adp['name'])
 
+#adp['name'].to_frame().head()
 adp['name'].to_frame().head()
+
 type(adp['name'].to_frame().head())
 
 # Multiple columns
@@ -86,3 +88,29 @@ adp_rbs.to_csv(path.join(DATA_DIR, 'adp_rb.csv'))
 
 adp_rbs.to_csv(path.join(DATA_DIR, 'adp_rb_no_index.csv'), index=False)
 
+
+###########
+# Exercises
+###########
+
+from os import path
+import pandas as pd
+
+DATA_DIR = '/Users/tanner.brown/downloads/ltcwff-files-book/data'
+adp = pd.read_csv(path.join(DATA_DIR, 'adp_2017.csv'))
+
+adp50 = adp.head(50)
+# OR
+adp50 = adp.sort_values('adp').head(50)
+
+adp.sort_values('name', ascending=False, inplace=True)
+
+type(adp.sort_values('adp'))
+
+adp_simple = adp[['name', 'position', 'adp']]
+
+adp_simple = adp_simple[['position', 'name', 'adp']]
+
+adp_simple['team'] = adp['team']
+
+adp_simple.to_csv(path.join(DATA_DIR, 'adp_simple.txt'), sep='|')
