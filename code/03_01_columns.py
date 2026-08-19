@@ -5,7 +5,7 @@ from os import path
 # stored
 # on Windows it might be something like 'C:/mydir'
 
-DATA_DIR = './data'
+DATA_DIR = '/Users/tanner.brown/downloads/ltcwff-files-book/data'
 
 # load player-game data
 pg = pd.read_csv(path.join(DATA_DIR, 'player_game_2017_sample.csv'))
@@ -111,3 +111,52 @@ pg[['month', 'gameid']].head()
 pg['month'].astype(int).head()
 
 pg.dtypes.head()
+
+
+
+
+# Excercises #
+
+import pandas as pd
+from os import path
+
+# change this to the directory where the csv files that come with the book are
+# stored
+# on Windows it might be something like 'C:/mydir'
+
+DATA_DIR = '/Users/tanner.brown/downloads/ltcwff-files-book/data'
+
+# load player-game data
+pg = pd.read_csv(path.join(DATA_DIR, 'player_game_2017_sample.csv'))
+
+
+pg['rec_pts_ppr'] = 0.1*pg['rec_yards'] + 6*pg['rec_tds'] + pg['receptions']
+pg['rec_pts_ppr'].head()
+
+pg['player_desc'] = pg['player_name'] + ' is the ' + pg['team'] + ' ' + pg['pos']
+pg['player_desc'].head()
+
+pg['is_possession_rec'] = pg['caught_airyards'] > pg['raw_yac']
+pg['is_possession_rec'].head()
+
+pg['len_last_name'] = (pg['player_name'].apply(lambda x: len(x.split('.')[-1])))
+pg['len_last_name'].head()
+
+pg['gameid'] = pg['gameid'].astype(str)
+
+pg.columns = [x.replace('_', ' ') for x in pg.columns]
+pg.head()
+
+pg.columns = [x.replace(' ', '_') for x in pg.columns]
+pg.head()
+
+pg['rush_td_percentage'] = pg['rush_tds']/pg['carries']
+pg['rush_td_percentage'].head()
+
+# Had to tweak using Codex, given the instruciton in the solution resulted
+# in a Chained Assignemnt Warning. The solution below is a better way to do it.
+pg['rush_td_percentage'] = pg['rush_td_percentage'].fillna(-99)
+pg['rush_td_percentage'].head()
+
+pg.drop('rush_td_percentage', axis=1, inplace=True)
+
