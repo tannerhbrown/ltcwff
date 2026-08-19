@@ -6,7 +6,7 @@ from os import path
 # stored
 # on Windows it might be something like 'C:/mydir'
 
-DATA_DIR = '/Users/nathan/fantasybook/data'
+DATA_DIR = '/Users/tanner.brown/downloads/ltcwff-files-book/data'
 
 # note: we're passing the index_col argument, which immediately setting the
 # index to be the player_id column
@@ -76,3 +76,48 @@ pg.query("raw_yac.notnull()")[['gameid', 'player_id', 'raw_yac']].head()
 # note: if getting an error on line above, try it with engine='python' like
 # this
 pg.query("raw_yac.notnull()", engine='python')[['gameid', 'player_id', 'raw_yac']].head()
+
+# Exercises #
+
+import pandas as pd
+import numpy as np
+from os import path
+
+# change this to the directory where the csv files that come with the book are
+# stored
+# on Windows it might be something like 'C:/mydir'
+
+DATA_DIR = '/Users/tanner.brown/downloads/ltcwff-files-book/data'
+
+# note: we're passing the index_col argument, which immediately setting the
+# index to be the player_id column
+adp = pd.read_csv(path.join(DATA_DIR, 'adp_2017.csv'), index_col='player_id')
+
+adp_cb1 = adp.loc[adp['team'] == 'DAL', ['name', 'position', 'adp']]
+adp_cb1.head()
+
+adp_cb2 = adp.query("team == 'DAL'")[['name', 'position', 'adp']]
+adp_cb2.head()
+
+adp_nocb = adp.loc[adp['team'] != 'DAL', ['name', 'position', 'adp', 'team']]
+adp_nocb.head()
+
+adp['last_name'] = adp['name'].apply(lambda x: x.split(' ')[1])
+adp[['last_name', 'position']].duplicated().any()
+adp[['last_name', 'position']].duplicated().sum()
+
+dups = adp[['last_name', 'position']].duplicated(keep=False)
+adp_dups = adp.loc[dups]
+adp_no_dups = adp.loc[~dups]
+
+import numpy as np
+
+adp['adp_description'] = 'average'
+adp.loc[adp['adp'] < 40, 'adp_description'] = 'stud'
+adp.loc[adp['adp'] > 120, 'adp_description'] = 'scrub'
+adp[['adp', 'adp_description']].sample(5)
+
+
+adp_no_desc1 = adp.loc[adp['adp_description'].isnull()]
+adp_no_desc2 = adp.query("adp_description.isnull()")
+adp_no_desc2.head()
