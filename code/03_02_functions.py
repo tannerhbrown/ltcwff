@@ -5,7 +5,7 @@ from os import path
 # stored
 # on Windows it might be something like 'C:/mydir'
 
-DATA_DIR = './data'
+DATA_DIR = '/Users/tanner.brown/downloads/ltcwff-files-book/data'
 
 # load adp data
 adp = pd.read_csv(path.join(DATA_DIR, 'adp_2017.csv'))  # adp data
@@ -44,4 +44,30 @@ adp['position'].value_counts()
 
 adp['position'].value_counts(normalize=True)
 
-pd.crosstab(adp['team'], adp['position']).head()
+# Exercises #
+
+import pandas as pd
+from os import path
+
+DATA_DIR = '/Users/tanner.brown/downloads/ltcwff-files-book/data'
+
+pg = pd.read_csv(path.join(DATA_DIR, 'player_game_2017_sample.csv')) # not in book
+
+pg['total_yards1'] = pg['rush_yards'] + pg['rec_yards'] + pg['pass_yards']
+pg['total_yards1'].head()
+
+pg['total_yards2'] = pg[['rush_yards', 'rec_yards', 'pass_yards']].sum(axis=1)
+pg['total_yards2'].head()
+
+(pg['total_yards1'] == pg['total_yards2']).all()
+
+pg[['rush_yards', 'rec_yards']].mean()
+
+((pg['pass_yards'] >= 300) & (pg['pass_tds'] >= 3)).sum()
+
+(((pg['pass_yards'] >= 300) & (pg['pass_tds'] >= 3)).sum() / (pg['pos'] == 'QB').sum())
+
+pg['rush_tds'].sum()
+
+pg['week'].value_counts()
+
