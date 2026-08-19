@@ -5,7 +5,7 @@ from os import path
 # stored
 # on Windows it might be something like 'C:/mydir'
 
-DATA_DIR = '/Users/nathan/fantasybook/data'
+DATA_DIR = '/Users/tanner.brown/downloads/ltcwff-files-book/data'
 
 pbp = pd.read_csv(path.join(DATA_DIR, 'play_data_sample.csv'))  # play by play data
 
@@ -47,8 +47,35 @@ qbs_reshaped = qbs.set_index(['player_name', 'week']).unstack()
 qbs_reshaped.head()
 
 total_tds = qbs_reshaped.sum(axis=1).head()
+total_tds
 
 qbs_reshaped.max(axis=0).head()  # note: axis=0 not nec since it's the default
 
 qbs_reshaped_undo = qbs_reshaped.stack()
 qbs_reshaped_undo.head()
+
+# Exercises #
+
+import pandas as pd
+from os import path
+
+DATA_DIR = '/Users/tanner.brown/downloads/ltcwff-files-book/data'
+
+pbp = pd.read_csv(path.join(DATA_DIR, 'play_data_sample.csv'))  # play by play data
+
+(pbp
+ .query("play_type == 'run'")
+ .groupby(['game_id', 'rusher_player_name'])['yards_gained'].sum())
+
+(pbp
+ .query("play_type == 'run'")
+ .groupby(['game_id', 'rusher_player_name'])['yards_gained'].mean())
+
+pbp['lte_0_yards'] = pbp['yards_gained'] <= 0
+(pbp
+ .query("play_type == 'run'")
+ .groupby(['game_id', 'rusher_player_name'])['lte_0_yards'].mean())
+
+pbp.groupby('game_id').count()
+
+pbp.groupby(['posteam', 'game_id'])[['turnover', 'first_down']].mean()
