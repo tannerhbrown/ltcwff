@@ -51,7 +51,7 @@ df = DataFrame(list_of_parsed_rows)
 df.head()
 
 # clean up formatting
-df.columns = ['ovr', 'pick', 'name', 'pos', 'team', 'adp', 'std_dev', 'high',
+df.columns = ['ovr', 'name', 'pos', 'team', 'adp', 'std_dev', 'high',
               'low', 'drafted', 'graph']
 
 float_cols =['adp', 'std_dev']
@@ -65,3 +65,37 @@ df.drop('graph', axis=1, inplace=True)
 # done
 df.head()
 
+
+# Exercises#
+
+def scrape_ffc(scoring, nteams, year):
+    # build URL based on arguments
+    ffc_url = (ffc_base_url + '/adp' + _scoring_helper(scoring) +
+               f'/{nteams}-team/all/{year}')
+    ffc_response = requests.get(ffc_url)
+
+    # all same as 05_01_scraping.py file
+    adp_soup = Soup(ffc_response.text)
+    tables = adp_soup.find_all('table')
+    adp_table = tables[0]
+    rows = adp_table.find_all('tr')
+
+    # move parse_row to own helper function
+    list_of_parsed_rows = [_parse_row(row) for row in rows[1:]]
+
+    # put it in a dataframe
+    df = DataFrame(list_of_parsed_rows)
+
+    # clean up formatting
+    df.columns = ['ovr', 'pick', 'name', 'pos', 'team', 'adp', 'std_dev',
+                  'high', 'low', 'drafted', 'graph']
+
+    float_cols = ['adp', 'std_dev']
+    int_cols = ['ovr', 'drafted']
+
+    df[float_cols] = df[float_cols].astype(float)
+    df[int_cols] = df[int_cols].astype(int)
+
+    df.drop('graph', axis=1, inplace=True)
+
+    return df
