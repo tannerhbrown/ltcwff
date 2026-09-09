@@ -311,4 +311,3 @@ df = pd.read_sql(
         g.home = th.team AND
         g.away = ta.team
     """, conn)"""
-)
