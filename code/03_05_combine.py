@@ -123,3 +123,56 @@ qbs_reset.head()
 pd.concat([qbs_reset, rbs_reset]).sort_index().head()
 
 pd.concat([qbs_reset, rbs_reset], ignore_index=True).sort_index().head()
+
+
+# Exercises #
+
+import pandas as pd
+from os import path
+
+DATA_DIR = '/Users/tanner.brown/downloads/ltcwff-files-book/data/'
+
+df_touch = pd.read_csv(path.join(DATA_DIR, 'problems/combine1', 'touch.csv'))
+df_yard = pd.read_csv(path.join(DATA_DIR, 'problems/combine1', 'yard.csv'))
+df_td = pd.read_csv(path.join(DATA_DIR, 'problems/combine1', 'td.csv'))
+
+df_comb1 = pd.merge(df_touch, df_yard)
+df_comb1 = pd.merge(df_comb1, df_td, how='left')
+
+df_comb1[['rush_tds', 'rec_tds']] = df_comb1[['rush_tds', 'rec_tds']].fillna(0)
+
+df_comb2 = pd.concat([df_touch.set_index('id'), df_yard.set_index('id'),
+                      df_td.set_index('id')], axis=1)
+
+df_comb2[['rush_tds', 'rec_tds']] = df_comb2[['rush_tds', 'rec_tds']].fillna(0)
+
+
+
+import pandas as pd
+from os import path
+
+DATA_DIR = '/Users/tanner.brown/downloads/ltcwff-files-book/data/'
+
+qb = pd.read_csv(path.join(DATA_DIR, 'problems/combine2', 'qb.csv'))
+rb = pd.read_csv(path.join(DATA_DIR, 'problems/combine2', 'rb.csv'))
+wr = pd.read_csv(path.join(DATA_DIR, 'problems/combine2', 'wr.csv'))
+te = pd.read_csv(path.join(DATA_DIR, 'problems/combine2', 'te.csv'))
+
+df = pd.concat([qb, rb, wr, te])
+
+
+
+import pandas as pd
+from os import path
+
+DATA_DIR = '/Users/tanner.brown/downloads/ltcwff-files-book/data/'
+
+adp = pd.read_csv(path.join(DATA_DIR, 'adp_2017.csv'))
+
+for pos in ['QB', 'RB', 'WR', 'TE', 'PK', 'DEF']:
+    (adp
+     .query(f"position == '{pos}'")
+     .to_csv(path.join(DATA_DIR, f'adp_{pos}.csv'), index=False))
+
+df = pd.concat([pd.read_csv(path.join(DATA_DIR, f'adp_{pos}.csv'))
+       for pos in ['QB', 'RB', 'WR', 'TE', 'PK', 'DEF']], ignore_index=True)
