@@ -7,7 +7,7 @@ from os import path
 # stored
 # on Windows it might be something like 'C:/mydir'
 
-DATA_DIR = './data'
+DATA_DIR = '/Users/tanner.brown/downloads/ltcwff-files-book/data'
 
 ###############
 # distributions
@@ -157,3 +157,47 @@ g.set_ylabels('Density')
 
 # saving
 g.savefig('scoring_by_pos_type.png')  # saving
+
+
+# Exercises #
+
+###############################################################################
+g = sns.displot(pbp.query("down <= 3"), x='yards_gained', kind='kde',
+                row='posteam', col='down', fill=True)
+g.figure.subplots_adjust(top=0.9)
+g.figure.suptitle('Distribution of Yards Gained Per Play by Down, Team, LTCWFF Sample')
+g.savefig('./solutions-to-exercises/6-1d.png')
+
+###############################################################################
+# 6.1e
+###############################################################################
+g = sns.displot(pbp.query("down <= 3"), x='yards_gained', col='down',
+                row='posteam', hue='posteam', fill=True)
+g.figure.subplots_adjust(top=0.9)
+g.figure.suptitle('Distribution of Yards Gained Per Play by Down, Team, LTCWFF Sample')
+g.savefig('./solutions-to-exercises/6-1e.png')
+
+###############################################################################
+# 6.2
+###############################################################################
+# relationships
+pg = pd.read_csv(path.join(DATA_DIR, 'player_game_2017_sample.csv'))
+g = sns.relplot(x='carries', y='rush_yards', hue='pos', data=pg)
+g.figure.subplots_adjust(top=0.9)
+g.figure.suptitle('Carries vs Rush Yards by Position, LTCWFF Sample')
+g.savefig('./answers-to-exercises/6-2.png')
+
+pg['ypc'] = pg['rush_yards']/pg['carries']
+
+# easy way to check
+pg.groupby('pos')['ypc'].mean()
+
+# more advanced/not seen before, but Pandas often does what you might expect
+pg.groupby('pos')['ypc'].describe()
+
+g = sns.relplot(x='qtr', y='yards_gained', kind='line', hue='posteam', data=pbp)
+
+g = sns.relplot(x='carries', y='rush_fumbles', data=pg)
+g = sns.relplot(x='attempts', y='pass_raw_airyards', data=pg)
+g = sns.relplot(x='pass_raw_airyards', y='interceptions', data=pg)
+
